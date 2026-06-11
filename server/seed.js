@@ -4,7 +4,7 @@ const { faker } = require('@faker-js/faker');
 const Event = require('./models/Event');
 
 dotenv.config();
-console.log('MONGO_URI exists:', !!process.env.MONGO_URI);
+// console.log('MONGO_URI exists:', !!process.env.MONGO_URI);
 
 const categories = [
     'Music',
