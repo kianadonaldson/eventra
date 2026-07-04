@@ -1,22 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import CategorySelect from './components/CategorySelect';
-import EventCard from './components/EventCard';
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
 import styled from 'styled-components';
+import { Routes, Route, Link } from 'react-router-dom';
 
-const Title = styled.h1`
-    font-size: 60px;
+const Nav = styled.nav`
     font-family: system-ui; sans-serif;
-    font-style: italic;
-    margin-top: 10px;
-    margin-bottom: 0px;
-`;
-
-const Cards = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 270px;
-    gap: 15px;
-    font-family: system-ui; sans-serif;
+    margin-top: 20px;
 `;
 
 export default function App() {
@@ -24,6 +14,7 @@ export default function App() {
     const [category, setCategory] = useState('All');
     const [visibleCount, setVisibleCount] = useState(6);
     const loadMoreRef = useRef(null);
+    const [favorites, setFavorites] = useState([]);
 
     const fetchEvents = () => {
         fetch('/api/events')
@@ -74,22 +65,51 @@ export default function App() {
         };
     }, [visibleCount, selectedEvents.length]);
 
+    const handleFavorite = (event) => {
+        setFavorites((prev) => {
+          const exists = prev.find((e) => e._id === event._id);
+      
+          if (exists) {
+            return prev.filter((e) => e._id !== event._id);
+          }
+      
+          return [...prev, event];
+        });
+      };
+
     return (
-        <div>
-            <Title>Eventra</Title>
-            <CategorySelect
-                category={category}
-                setCategory={setCategory}
-            />
-            <Cards>
-                {visibleEvents.map(event => (
-                    <EventCard
-                        key={event._id}
-                        event={event}
-                    />
-                ))}
-            </Cards>
-            <div ref ={loadMoreRef}></div>
-        </div>
+        <>
+            <Nav>
+                <Link to="/">Home</Link>
+                {' | '}
+                <Link to="/favorites">Favorites</Link>
+            </Nav>
+
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <Home
+                            visibleEvents={visibleEvents}
+                            category={category}
+                            setCategory={setCategory}
+                            loadMoreRef={loadMoreRef}
+                            favorites={favorites}
+                            handleFavorite={handleFavorite}
+                        />
+                    }
+                />
+
+                <Route
+                    path="/favorites"
+                    element={
+                        <Favorites
+                            favorites={favorites}
+                            setFavorites={setFavorites}
+                        />
+                    }
+                />
+            </Routes>
+        </>
     );
 }

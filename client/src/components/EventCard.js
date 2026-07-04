@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Heart } from 'lucide-react';
-import { useState } from 'react';
 
 const Card = styled.div`
     border: 2px solid #C0C0C0;
@@ -18,8 +17,7 @@ const Description = styled.p`
     margin: 0;
 `;
 
-export default function EventCard({ event }) {
-    const [liked, setLiked] = useState(false);
+export default function EventCard({ event, handleFavorite, liked }) {
 
     let date = new Date(event.date);
     date = date.toLocaleString('en-US', {
@@ -33,7 +31,7 @@ export default function EventCard({ event }) {
         <Card>
             <h3>{event.title}</h3>
             <Heart
-                onClick={() => setLiked(!liked)}
+                onClick={() => handleFavorite(event)}
                 style={{
                     cursor: "pointer",
                     fill: liked ? "red" : "none",
