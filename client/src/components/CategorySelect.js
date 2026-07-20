@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Select = styled.select`
     padding: 10px;
     margin: 15px;
-    font-family: system-ui; sans-serif;
+    font-family: system-ui, sans-serif;
 `;
 
 export default function CategorySelect({ category, setCategory }) {

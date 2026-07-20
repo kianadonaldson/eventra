@@ -4,7 +4,7 @@ import EventCard from '../components/EventCard';
 
 const Title = styled.h1`
     font-size: 40px;
-    font-family: system-ui; sans-serif;
+    font-family: system-ui, sans-serif;
     margin-top: 10px;
     margin-bottom: 0px;
 `;

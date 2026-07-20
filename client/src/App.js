@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Routes, Route, Link } from 'react-router-dom';
 
 const Nav = styled.nav`
-    font-family: system-ui; sans-serif;
+    font-family: system-ui, sans-serif;
     margin-top: 20px;
 `;
 
