@@ -1,6 +1,7 @@
 import React from 'react';
 import CategorySelect from '../components/CategorySelect';
 import EventCard from '../components/EventCard';
+import Search from '../components/Search';
 import styled from 'styled-components';
 
 const Title = styled.h1`
@@ -19,7 +20,7 @@ const Cards = styled.div`
     font-family: system-ui, sans-serif;
 `;
 
-export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite }) {
+export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery }) {
     return (
         <>
             <Title>Eventra</Title>
@@ -27,6 +28,11 @@ export default function Home({ visibleEvents, category, setCategory, loadMoreRef
             <CategorySelect
                 category={category}
                 setCategory={setCategory}
+            />
+
+            <Search
+                query={query}
+                setQuery={setQuery}
             />
 
             <Cards>

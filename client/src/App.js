@@ -15,6 +15,7 @@ export default function App() {
     const [visibleCount, setVisibleCount] = useState(6);
     const loadMoreRef = useRef(null);
     const [favorites, setFavorites] = useState([]);
+    const [query, setQuery] = useState('');
 
     const fetchEvents = () => {
         fetch('/api/events')
@@ -31,7 +32,10 @@ export default function App() {
             ? events
             : events.filter(event => event.category === category);
 
-    const visibleEvents = selectedEvents.slice(0, visibleCount);
+    const searchedEvents = 
+        selectedEvents.filter(event => event.title.toLowerCase().includes(query.toLowerCase()));
+
+    const visibleEvents = searchedEvents.slice(0, visibleCount);
 
     useEffect(() => {
         setVisibleCount(6);
@@ -96,6 +100,8 @@ export default function App() {
                             loadMoreRef={loadMoreRef}
                             favorites={favorites}
                             handleFavorite={handleFavorite}
+                            query={query}
+                            setQuery={setQuery}
                         />
                     }
                 />
