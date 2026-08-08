@@ -17,6 +17,7 @@ export default function App() {
     const [favorites, setFavorites] = useState([]);
     const [query, setQuery] = useState('');
     const [surpriseEvent, setSurpriseEvent] = useState(null);
+    const [upcomingEvents, setUpcomingEvents] = useState(null);
 
     const fetchEvents = () => {
         fetch('/api/events')
@@ -26,6 +27,7 @@ export default function App() {
 
     useEffect(() => {
         fetchEvents();
+        
     }, []);
 
     const selectedEvents =
@@ -38,11 +40,14 @@ export default function App() {
 
     const visibleEvents = surpriseEvent
         ? [surpriseEvent]
-        : searchedEvents.slice(0, visibleCount);
+        : upcomingEvents
+            ? upcomingEvents
+            : searchedEvents.slice(0, visibleCount);
 
     useEffect(() => {
         setVisibleCount(6);
         setSurpriseEvent(null);
+        setUpcomingEvents(null);
     }, [category, query]);
 
     useEffect(() => {
@@ -50,7 +55,7 @@ export default function App() {
             entries => {
                 if (
                     entries[0].isIntersecting && 
-                    visibleCount < selectedEvents.length
+                    visibleCount < searchedEvents.length
                 ) {
                     setVisibleCount(prev => prev + 6);
                 }
@@ -94,7 +99,24 @@ export default function App() {
             ];
 
         setSurpriseEvent(randomEvent);
+        setUpcomingEvents(null);
       };
+
+      const handleUpcomingOnly = () => {
+        const today = new Date();
+        const month = today.getMonth();
+        const nextTwoMonths = new Date(today);
+        nextTwoMonths.setMonth(month + 2);
+
+        const filteredUpcomingEvents =
+            selectedEvents.filter(event => {
+                const date = new Date(event.date);
+                return (date >= today) && (date < nextTwoMonths);
+        });
+
+        setUpcomingEvents(filteredUpcomingEvents);
+        setSurpriseEvent(null);
+      }
 
     return (
         <>
@@ -118,6 +140,7 @@ export default function App() {
                             query={query}
                             setQuery={setQuery}
                             handleSurpriseMe={handleSurpriseMe}
+                            handleUpcomingOnly={handleUpcomingOnly}
                         />
                     }
                 />
