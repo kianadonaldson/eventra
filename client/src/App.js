@@ -71,7 +71,7 @@ export default function App() {
                 observer.unobserve(currentRef);
             }
         };
-    }, [visibleCount, selectedEvents.length]);
+    }, [visibleCount, searchedEvents.length]);
 
     const handleFavorite = (event) => {
         setFavorites((prev) => {
