@@ -16,6 +16,7 @@ export default function App() {
     const loadMoreRef = useRef(null);
     const [favorites, setFavorites] = useState([]);
     const [query, setQuery] = useState('');
+    const [surpriseEvent, setSurpriseEvent] = useState(null);
 
     const fetchEvents = () => {
         fetch('/api/events')
@@ -35,11 +36,14 @@ export default function App() {
     const searchedEvents = 
         selectedEvents.filter(event => event.title.toLowerCase().includes(query.toLowerCase()));
 
-    const visibleEvents = searchedEvents.slice(0, visibleCount);
+    const visibleEvents = surpriseEvent
+        ? [surpriseEvent]
+        : searchedEvents.slice(0, visibleCount);
 
     useEffect(() => {
         setVisibleCount(6);
-    }, [category]);
+        setSurpriseEvent(null);
+    }, [category, query]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -81,6 +85,17 @@ export default function App() {
         });
       };
 
+      const handleSurpriseMe = () => {
+        if (searchedEvents.length === 0) return;
+
+        const randomEvent = 
+            searchedEvents[
+                Math.floor(Math.random() * searchedEvents.length)
+            ];
+
+        setSurpriseEvent(randomEvent);
+      };
+
     return (
         <>
             <Nav>
@@ -102,6 +117,7 @@ export default function App() {
                             handleFavorite={handleFavorite}
                             query={query}
                             setQuery={setQuery}
+                            handleSurpriseMe={handleSurpriseMe}
                         />
                     }
                 />

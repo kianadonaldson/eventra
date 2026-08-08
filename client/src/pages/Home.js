@@ -2,6 +2,7 @@ import React from 'react';
 import CategorySelect from '../components/CategorySelect';
 import EventCard from '../components/EventCard';
 import Search from '../components/Search';
+import SurpriseMe from '../components/SurpriseMe';
 import styled from 'styled-components';
 
 const Title = styled.h1`
@@ -20,7 +21,7 @@ const Cards = styled.div`
     font-family: system-ui, sans-serif;
 `;
 
-export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery }) {
+export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery, handleSurpriseMe }) {
     return (
         <>
             <Title>Eventra</Title>
@@ -33,6 +34,10 @@ export default function Home({ visibleEvents, category, setCategory, loadMoreRef
             <Search
                 query={query}
                 setQuery={setQuery}
+            />
+
+            <SurpriseMe
+                handleSurpriseMe={handleSurpriseMe}
             />
 
             <Cards>
