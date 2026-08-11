@@ -4,6 +4,7 @@ import EventCard from '../components/EventCard';
 import Search from '../components/Search';
 import SurpriseMe from '../components/SurpriseMe';
 import UpcomingOnly from '../components/UpcomingOnly';
+import Sort from '../components/Sort';
 import styled from 'styled-components';
 
 const Title = styled.h1`
@@ -22,7 +23,7 @@ const Cards = styled.div`
     font-family: system-ui, sans-serif;
 `;
 
-export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery, handleSurpriseMe, handleUpcomingOnly }) {
+export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery, handleSurpriseMe, handleUpcomingOnly, sortCategory, setSortCategory }) {
     return (
         <>
             <Title>Eventra</Title>
@@ -43,6 +44,11 @@ export default function Home({ visibleEvents, category, setCategory, loadMoreRef
 
             <UpcomingOnly
                 handleUpcomingOnly={handleUpcomingOnly}
+            />
+
+            <Sort
+                sortCategory={sortCategory}
+                setSortCategory={setSortCategory}
             />
 
             <Cards>

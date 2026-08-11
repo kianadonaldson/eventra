@@ -18,6 +18,7 @@ export default function App() {
     const [query, setQuery] = useState('');
     const [surpriseEvent, setSurpriseEvent] = useState(null);
     const [upcomingEvents, setUpcomingEvents] = useState(null);
+    const [sortCategory, setSortCategory] = useState('');
 
     const fetchEvents = () => {
         fetch('/api/events')
@@ -38,11 +39,32 @@ export default function App() {
     const searchedEvents = 
         selectedEvents.filter(event => event.title.toLowerCase().includes(query.toLowerCase()));
 
+    const sortedEvents = 
+        sortCategory === "default"
+            ? searchedEvents
+            : sortCategory === "soonest"
+                ? [...searchedEvents].sort((a, b) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    return dateA - dateB;
+                })
+                : sortCategory === "latest"
+                    ? [...searchedEvents].sort((a, b) => {
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+                        return dateB - dateA;
+                    })
+                    : sortCategory === "title"
+                        ? [...searchedEvents].sort((a, b) => {
+                            return a.title.localeCompare(b.title);
+                        })
+                        : searchedEvents;
+
     const visibleEvents = surpriseEvent
         ? [surpriseEvent]
         : upcomingEvents
             ? upcomingEvents
-            : searchedEvents.slice(0, visibleCount);
+            : sortedEvents.slice(0, visibleCount);
 
     useEffect(() => {
         setVisibleCount(6);
@@ -141,6 +163,8 @@ export default function App() {
                             setQuery={setQuery}
                             handleSurpriseMe={handleSurpriseMe}
                             handleUpcomingOnly={handleUpcomingOnly}
+                            sortCategory={sortCategory}
+                            setSortCategory={setSortCategory}
                         />
                     }
                 />
