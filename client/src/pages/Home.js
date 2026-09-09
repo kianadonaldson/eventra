@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CategorySelect from '../components/CategorySelect';
 import EventCard from '../components/EventCard';
 import Search from '../components/Search';
 import SurpriseMe from '../components/SurpriseMe';
 import UpcomingOnly from '../components/UpcomingOnly';
 import Sort from '../components/Sort';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+    body {
+        background-color: #f5f5f5;
+        color: #121212;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+        background-color: #121212;
+        color: #f5f5f5;
+    }
+`;
 
 const Title = styled.h1`
     font-size: 60px;
@@ -23,9 +36,34 @@ const Cards = styled.div`
     font-family: system-ui, sans-serif;
 `;
 
+const Button = styled.button`
+    padding: 20px;
+    margin: 15px;
+    font-family: system-ui, sans-serif;
+    background-color: ${({ $darkMode }) =>
+        $darkMode ? '#f5f5f5' : '#121212'};
+    color: ${({ $darkMode }) =>
+        $darkMode ? '#121212' : '#f5f5f5'};
+    border-radius: 50%;
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
 export default function Home({ visibleEvents, category, setCategory, loadMoreRef, favorites, handleFavorite, query, setQuery, handleSurpriseMe, handleUpcomingOnly, sortCategory, setSortCategory }) {
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem("theme") === "dark";
+      });
+      
+      useEffect(() => {
+        document.body.classList.toggle("dark", darkMode);
+        localStorage.setItem("theme", darkMode ? "dark" : "light");
+      }, [darkMode]);
+
     return (
         <>
+            <GlobalStyle />
+
             <Title>Eventra</Title>
 
             <CategorySelect
@@ -50,6 +88,13 @@ export default function Home({ visibleEvents, category, setCategory, loadMoreRef
                 sortCategory={sortCategory}
                 setSortCategory={setSortCategory}
             />
+
+            <Button
+                $darkMode={darkMode}
+                onClick={() => setDarkMode(!darkMode)}
+            >
+                {darkMode ? "☀️ Light" : "🌙 Dark"}
+            </Button>
 
             <Cards>
                 {visibleEvents.map((event) => (
